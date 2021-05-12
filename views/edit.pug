@@ -13,7 +13,7 @@ block content
       label 既存の日程候補
       ul.list-group
         each candidate in candidates
-          li.list-group-item #{candidate.candidateName}
+          lli.list-group-item #{candidate.candidateName}
       label(for="candidates").my-2 候補日程の追加 (改行して複数入力してください)
       textarea(name="candidates")#candidates.form-control
     div

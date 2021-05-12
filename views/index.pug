@@ -16,6 +16,6 @@ block content
           th 更新日時
         each schedule in schedules
           tr
-            td
+            td 
               a(href=`/schedules/${schedule.scheduleId}`) #{schedule.scheduleName}
-            td #{schedule.updatedAt}
+            td #{schedule.formattedUpdatedAt}
