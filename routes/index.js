@@ -25,7 +25,7 @@ router.get('/', (req, res, next) => {
       res.render('index', {
         title: title,
         user: req.user,
-        schedules: schedule.formattedUpdatedAt
+        schedules: schedules
       });
     });
   } else {
