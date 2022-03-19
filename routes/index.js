@@ -13,6 +13,14 @@ router.get('/', (req, res, next) => {
       },
       order: [['updatedAt', 'DESC']]
     }).then((schedules) => {
+	    schedules.forEach((schedule) => {
+		    const dateOptions = {
+			    dateStyle: 'full',       // 日付の表示スタイル full long medium short
+			    timeStyle: 'short',      // 時刻の表示スタイル full long medium short
+			    era:'long'               // 年代の表現         long short narrow
+		    }
+		    schedule.formattedUpdatedAt = new Intl.DateTimeFormat('ja-JP-u-ca-japanese', dateOptions).format(schedule.updatedAt);
+	    });
       res.render('index', {
         title: title,
         user: req.user,
