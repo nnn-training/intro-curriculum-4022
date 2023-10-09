@@ -3,7 +3,7 @@ extends layout
 block content
   div.container.my-3
     div.p-5.bg-light.rounded-3
-      h1.text-body 予定調整くん
+      h1.text-body #{title}
       p.lead 予定調整くんは、GitHub で認証でき、予定を作って出欠が取れるサービスです。
   div.container
     if user
@@ -19,4 +19,4 @@ block content
             tr
               td
                 a(href=`/schedules/${schedule.scheduleId}`) #{schedule.scheduleName}
-              td #{schedule.updatedAt}
+              td #{schedule.formattedUpdatedAt}
