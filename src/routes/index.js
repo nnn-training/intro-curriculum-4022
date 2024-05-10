@@ -4,6 +4,13 @@ const layout = require("../layout");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient({ log: ["query"] });
 
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
+
 const app = new Hono();
 
 function scheduleTable(schedules) {
@@ -21,7 +28,7 @@ function scheduleTable(schedules) {
                 ${schedule.scheduleName}
               </a>
             </td>
-            <td>${schedule.updatedAt}</td>
+            <td>${schedule.formattedUpdatedAt}</td>
           </tr>
         `,
       )}
@@ -37,6 +44,9 @@ app.get("/", async (c) => {
         orderBy: { updatedAt: "desc" },
       })
     : [];
+  schedules.forEach((schedule) => {
+    schedule.formattedUpdatedAt = dayjs(schedule.updatedAt).tz().format("YYYY/MM/DD HH:mm");
+  });
 
   return c.html(
     layout(
