@@ -8,7 +8,7 @@ const prisma = new PrismaClient({ log: ["query"] });
 
 const app = new Hono();
 
-app.use(ensureAuthenticated())
+app.use(ensureAuthenticated());
 
 async function createCandidates(candidateNames, scheduleId) {
   const candidates = candidateNames.map((candidateName) => ({
