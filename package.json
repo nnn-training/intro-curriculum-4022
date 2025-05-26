@@ -11,12 +11,12 @@
     "test": "jest --setupFiles dotenv/config"
   },
   "dependencies": {
-    "@hono/node-server": "1.11.0",
-    "@hono/oauth-providers": "0.4.0",
+    "@hono/node-server": "^1.14.2",
+    "@hono/oauth-providers": "0.8.0",
     "@popperjs/core": "2.11.8",
     "@prisma/client": "5.13.0",
     "bootstrap": "5.3.3",
-    "hono": "4.2.7",
+    "hono": "^4.7.10",
     "iron-session": "8.0.1",
     "jquery": "3.7.1"
   },
