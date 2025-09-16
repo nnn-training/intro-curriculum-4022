@@ -5,8 +5,38 @@ const ensureAuthenticated = require("../middlewares/ensure-authenticated");
 const { randomUUID } = require("node:crypto");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient({ log: ["query"] });
+const { z } = require('zod');
+const { zValidator } = require('@hono/zod-validator');
+const { HTTPException } = require('hono/http-exception');
 
 const app = new Hono();
+
+
+const scheduleIdValidator = zValidator(
+  'param',
+  z.object({
+    scheduleId: z.string().uuid(),
+  }),
+  (result) => {
+    if (!result.success) {
+      throw new HTTPException(400, { message: 'URL の形式が正しくありません。' });
+    }
+  }
+);
+
+const scheduleFormValidator = zValidator(
+  'form',
+  z.object({
+    scheduleName: z.string(),
+    memo: z.string(),
+    candidates: z.string(),
+  }),
+  (result) => {
+    if (!result.success) {
+      throw new HTTPException(400, { message: '入力された情報が不十分または正しくありません' });
+    }
+  }
+);
 
 app.use(ensureAuthenticated());
 
@@ -55,9 +85,9 @@ app.get("/new", (c) => {
   );
 });
 
-app.post("/", async (c) => {
+app.post('/', scheduleFormValidator, async (c) => {
   const { user } = c.get("session") ?? {};
-  const body = await c.req.parseBody();
+  const body = c.req.valid('form');
 
   // 予定を登録
   const schedule = await prisma.schedule.create({
@@ -78,10 +108,10 @@ app.post("/", async (c) => {
   return c.redirect("/schedules/" + schedule.scheduleId);
 });
 
-app.get("/:scheduleId", async (c) => {
+app.get('/:scheduleId', scheduleIdValidator, async (c) => {
   const { user } = c.get("session") ?? {};
   const schedule = await prisma.schedule.findUnique({
-    where: { scheduleId: c.req.param("scheduleId") },
+    where: { scheduleId: c.req.valid('param').scheduleId },
     include: {
       user: {
         select: {
@@ -256,10 +286,10 @@ function isMine(userId, schedule) {
   return schedule && parseInt(schedule.createdBy, 10) === parseInt(userId, 10);
 }
 
-app.get("/:scheduleId/edit", async (c) => {
+app.get('/:scheduleId/edit', scheduleIdValidator, async (c) => {
   const { user } = c.get("session") ?? {};
   const schedule = await prisma.schedule.findUnique({
-    where: { scheduleId: c.req.param("scheduleId") },
+    where: { scheduleId: c.req.valid('param').scheduleId },
   });
   if (!isMine(user.id, schedule)) {
     return c.notFound();
@@ -319,16 +349,16 @@ app.get("/:scheduleId/edit", async (c) => {
   );
 });
 
-app.post("/:scheduleId/update", async (c) => {
+app.post('/:scheduleId/update', scheduleIdValidator, scheduleFormValidator, async (c) => {
   const { user } = c.get("session") ?? {};
   const schedule = await prisma.schedule.findUnique({
-    where: { scheduleId: c.req.param("scheduleId") },
+    where: { scheduleId: c.req.valid('param').scheduleId },
   });
   if (!isMine(user.id, schedule)) {
     return c.notFound();
   }
 
-  const body = await c.req.parseBody();
+  const body = c.req.valid('form');
   const updatedSchedule = await prisma.schedule.update({
     where: { scheduleId: schedule.scheduleId },
     data: {
@@ -355,10 +385,10 @@ async function deleteScheduleAggregate(scheduleId) {
 }
 app.deleteScheduleAggregate = deleteScheduleAggregate;
 
-app.post("/:scheduleId/delete", async (c) => {
+app.post('/:scheduleId/delete', scheduleIdValidator, async (c) => {
   const { user } = c.get("session") ?? {};
   const schedule = await prisma.schedule.findUnique({
-    where: { scheduleId: c.req.param("scheduleId") },
+    where: { scheduleId: c.req.valid('param').scheduleId },
   });
   if (!isMine(user.id, schedule)) {
     return c.notFound();
