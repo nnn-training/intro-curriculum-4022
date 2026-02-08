@@ -4,6 +4,13 @@ const layout = require("../layout");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient({ log: ["query"] });
 
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
+
 const app = new Hono();
 
 function scheduleTable(schedules) {
@@ -14,29 +21,34 @@ function scheduleTable(schedules) {
         <th>更新日時</th>
       </tr>
       ${schedules.map(
-        (schedule) => html`
+        schedule => html`
           <tr>
             <td>
               <a href="/schedules/${schedule.scheduleId}">
                 ${schedule.scheduleName}
               </a>
             </td>
-            <td>${schedule.updatedAt}</td>
+            <td>${schedule.formattedUpdatedAt}</td>
           </tr>
-        `,
+        `
       )}
     </table>
   `;
 }
 
-app.get("/", async (c) => {
+app.get("/", async c => {
   const { user } = c.get("session") ?? {};
   const schedules = user
     ? await prisma.schedule.findMany({
-      where: { createdBy: user.id },
-      orderBy: { updatedAt: "desc" },
-    })
+        where: { createdBy: user.id },
+        orderBy: { updatedAt: "desc" },
+      })
     : [];
+  schedules.forEach(schedule => {
+    schedule.formattedUpdatedAt = dayjs(schedule.updatedAt)
+      .tz()
+      .format("YYYY/MM/DD HH:mm");
+  });
 
   return c.html(
     layout(
@@ -55,7 +67,11 @@ app.get("/", async (c) => {
           ? html`
               <div class="my-3">
                 <h3 class="my-3">予定を作る</h3>
-                <a class="btn btn-primary" href="/schedules/new">予定を作る</a>
+                <a
+                  class="btn btn-primary"
+                  href="/schedules/new"
+                  >予定を作る</a
+                >
                 ${schedules.length > 0
                   ? html`
                       <h3 class="my-3">あなたの作った予定一覧</h3>
@@ -65,8 +81,8 @@ app.get("/", async (c) => {
               </div>
             `
           : ""}
-      `,
-    ),
+      `
+    )
   );
 });
 
