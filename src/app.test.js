@@ -29,7 +29,8 @@ async function sendFormRequest(app, path, body) {
     method: "POST",
     body: new URLSearchParams(body),
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Origin': 'http://localhost:3000',
     },
   });
 }

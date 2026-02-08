@@ -1,11 +1,13 @@
 "use strict";
 
 const { Hono } = require("hono");
+const { csrf } = require("hono/csrf");
 const { logger } = require("hono/logger");
 const { html } = require("hono/html");
 const { HTTPException } = require("hono/http-exception");
 const { secureHeaders } = require("hono/secure-headers");
 const { env } = require("hono/adapter");
+const { getCookie, deleteCookie } = require('hono/cookie');
 const { serveStatic } = require("@hono/node-server/serve-static");
 const { trimTrailingSlash } = require("hono/trailing-slash");
 const { githubAuth } = require("@hono/oauth-providers/github");
@@ -24,9 +26,18 @@ const commentsRouter = require("./routes/comments");
 
 const app = new Hono();
 
+app.use(async (c, next) => {
+  const { CSRF_TRUSTED_ORIGIN } = env(c);
+  const handler = csrf({
+    origin: CSRF_TRUSTED_ORIGIN,
+  });
+  await handler(c, next);
+});
 app.use(logger());
 app.use(serveStatic({ root: "./public" }));
-app.use(secureHeaders());
+app.use(secureHeaders({
+  referrerPolicy: 'strict-origin-when-cross-origin',
+}));
 app.use(trimTrailingSlash());
 
 // セッション管理用のミドルウェア
@@ -74,7 +85,14 @@ app.get("/auth/github", async (c) => {
     create: data,
   });
 
-  return c.redirect("/");
+  const loginFrom = getCookie(c, 'loginFrom');
+  // オープンリダイレクタ脆弱性対策
+  if (loginFrom && loginFrom.startsWith('/')) {
+    deleteCookie(c, 'loginFrom');
+    return c.redirect(loginFrom);
+  } else {
+    return c.redirect('/');
+  }
 });
 
 // ルーティング
