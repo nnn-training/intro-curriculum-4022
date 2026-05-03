@@ -18,7 +18,6 @@ function mockIronSession() {
 
 // テストで作成したデータを削除
 async function deleteScheduleAggregate(scheduleId) {
-  // iron-session のモックを使うため、ここで読み込む
   const { deleteScheduleAggregate } = require("./routes/schedules");
   await deleteScheduleAggregate(scheduleId);
 }
