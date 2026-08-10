@@ -21,7 +21,7 @@ function scheduleTable(schedules) {
                 ${schedule.scheduleName}
               </a>
             </td>
-            <td>${schedule.updatedAt}</td>
+            <td>${schedule.formattedUpdatedAt}</td>
           </tr>
         `,
       )}
