@@ -12,3 +12,7 @@ ENV LANG=ja_JP.UTF-8
 ENV TZ=Asia/Tokyo
 
 WORKDIR /app
+COPY . /app
+RUN yarn install
+RUN npx webpack
+CMD ["sh", "run.sh"]
