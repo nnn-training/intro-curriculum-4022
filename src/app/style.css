@@ -1,0 +1,318 @@
+/* モダンなUIスタイル */
+
+/* 予定テーブルの強化 */
+.schedule-table th,
+.schedule-table td {
+  vertical-align: middle;
+}
+
+/* アバター画像 */
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #dee2e6;
+  vertical-align: middle;
+  margin-right: 6px;
+  background-color: #f8f9fa;
+}
+
+.user-avatar-lg {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e9ecef;
+  background-color: #f8f9fa;
+}
+
+/* 順位バッジ */
+.rank-badge {
+  font-size: 0.85rem;
+  padding: 0.35em 0.65em;
+  font-weight: 600;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rank-1 {
+  background: linear-gradient(135deg, #ffd700, #ffae00);
+  color: #5a3e00;
+  box-shadow: 0 2px 6px rgba(255, 174, 0, 0.4);
+}
+
+.rank-2 {
+  background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+  color: #333333;
+}
+
+.rank-3 {
+  background: linear-gradient(135deg, #e6b89c, #cd7f32);
+  color: #4a2800;
+}
+
+/* 集計ゲージ */
+.availability-summary-cell {
+  min-width: 170px;
+}
+
+.availability-progress-container {
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 10px;
+  margin-bottom: 5px;
+}
+
+.availability-progress-bar {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #198754, #20c997);
+  transition: width 0.4s ease-in-out;
+}
+
+/* 出欠ボタンのホバー・アニメーション */
+.availability-toggle-button {
+  transition: all 0.2s ease-in-out;
+  font-weight: 700;
+  min-width: 48px;
+}
+
+.availability-toggle-button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* チャット風コメント吹き出し */
+.comment-card {
+  border: 1px solid #edf2f7;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease;
+}
+
+.comment-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.comment-bubble {
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  padding: 10px 14px;
+  position: relative;
+  margin-top: 6px;
+  word-break: break-word;
+  color: #334155;
+}
+
+.comment-bubble::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 18px;
+  border-width: 0 6px 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent #f1f5f9 transparent;
+}
+
+.comment-bubble-self {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.comment-bubble-self::before {
+  border-color: transparent transparent #e0f2fe transparent;
+}
+
+/* コピーボタンの演出 */
+.btn-copy {
+  transition: all 0.2s ease;
+}
+
+.btn-copy.copied {
+  background-color: #198754 !important;
+  color: #ffffff !important;
+  border-color: #198754 !important;
+}
+
+/* 🎈 ヒーローエリア ＆ フローティング背景アニメーション */
+.hero-container {
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  border: 1px solid #e2e8f0;
+}
+
+.floating-icons-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.floating-icon {
+  position: absolute;
+  user-select: none;
+  opacity: 0.28;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+}
+
+@keyframes floatSlow {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(8deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes floatReverse {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(16px) rotate(-10deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes floatDrift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(12px, -15px) rotate(12deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+.icon-1 {
+  top: 12%;
+  left: 8%;
+  font-size: 2.2rem;
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.icon-2 {
+  top: 18%;
+  right: 10%;
+  font-size: 2.4rem;
+  animation: floatReverse 7s ease-in-out infinite;
+}
+
+.icon-3 {
+  bottom: 20%;
+  left: 12%;
+  font-size: 1.8rem;
+  animation: floatDrift 8s ease-in-out infinite;
+}
+
+.icon-4 {
+  bottom: 15%;
+  right: 12%;
+  font-size: 2.1rem;
+  animation: floatSlow 5.5s ease-in-out infinite 1s;
+}
+
+.icon-5 {
+  top: 55%;
+  left: 4%;
+  font-size: 1.9rem;
+  animation: floatReverse 6.5s ease-in-out infinite 0.5s;
+}
+
+.icon-6 {
+  top: 10%;
+  left: 45%;
+  font-size: 1.6rem;
+  animation: floatDrift 9s ease-in-out infinite;
+}
+
+.icon-7 {
+  bottom: 8%;
+  left: 50%;
+  font-size: 2rem;
+  animation: floatSlow 7.5s ease-in-out infinite 1.5s;
+}
+
+.icon-8 {
+  top: 50%;
+  right: 5%;
+  font-size: 2rem;
+  animation: floatReverse 8.5s ease-in-out infinite;
+}
+
+/* 📊 ライブ統計ダッシュボードカード */
+.stat-card {
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.stat-icon-blue {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.stat-icon-green {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.stat-icon-purple {
+  background: #faf5ff;
+  color: #9333ea;
+}
+
+.stat-icon-orange {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1e293b;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 4px;
+}
+

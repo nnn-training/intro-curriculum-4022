@@ -79,6 +79,19 @@ describe("/logout", () => {
   });
 });
 
+describe("/", () => {
+  test("トップページにヒーローとライブ統計ダッシュボードが表示される", async () => {
+    const app = require("./app");
+    const res = await app.request("/");
+    const body = await res.text();
+    expect(body).toMatch(/予定調整くん改/);
+    expect(body).toMatch(/floating-icons-bg/);
+    expect(body).toMatch(/サービスの利用状況/);
+    expect(body).toMatch(/stat-card/);
+    expect(res.status).toBe(200);
+  });
+});
+
 describe("/schedules", () => {
   let scheduleId = "";
   beforeAll(() => {
@@ -119,6 +132,11 @@ describe("/schedules", () => {
     expect(body).toMatch(/テスト候補1/);
     expect(body).toMatch(/テスト候補2/);
     expect(body).toMatch(/テスト候補3/);
+    // 追加した機能（集計・プログレスバー・コメントセクション・URLコピーボタン）の表示確認
+    expect(body).toMatch(/availability-progress-bar/);
+    expect(body).toMatch(/candidate-rank-container/);
+    expect(body).toMatch(/copy-url-button/);
+    expect(body).toMatch(/💬 参加者のコメント/);
     expect(res.status).toBe(200);
   });
 });
